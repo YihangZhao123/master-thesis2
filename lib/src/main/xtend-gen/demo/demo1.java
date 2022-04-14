@@ -5,21 +5,22 @@ import generator.generator;
 import org.eclipse.xtext.xbase.lib.InputOutput;
 import template.nonRTOS.actor.actorInc;
 import template.nonRTOS.actor.actorSrc;
-import template.nonRTOS.actor.spinlock.spinlock;
 import template.nonRTOS.fifo.circular.A.channelInc;
 import template.nonRTOS.fifo.circular.A.channelSrc;
+import template.nonRTOS.spinlock.spinlock;
 import template.nonRTOS.subsystem.configInc;
-import template.nonRTOS.subsystem.subsystemMultiprocessor;
+import template.nonRTOS.subsystem.subsystemIncUniprocessor;
+import template.nonRTOS.subsystem.subsystemSrcUniprocessor;
 import utils.Load;
 
 /**
- * demo for multiprocessor
+ * demo for uniprocessor
  */
 @SuppressWarnings("all")
 public class demo1 {
   public static void main(final String[] args) {
     final String forsyde = "forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";
-    final String root = "generateCode\\c\\multi";
+    final String root = "generateCode\\c\\single";
     ForSyDeSystemGraph model = Load.load(forsyde);
     generator gen = new generator(model, root);
     channelInc _channelInc = new channelInc();
@@ -32,8 +33,10 @@ public class demo1 {
     gen.add(_actorInc);
     actorSrc _actorSrc = new actorSrc();
     gen.add(_actorSrc);
-    subsystemMultiprocessor _subsystemMultiprocessor = new subsystemMultiprocessor();
-    gen.add(_subsystemMultiprocessor);
+    subsystemIncUniprocessor _subsystemIncUniprocessor = new subsystemIncUniprocessor();
+    gen.add(_subsystemIncUniprocessor);
+    subsystemSrcUniprocessor _subsystemSrcUniprocessor = new subsystemSrcUniprocessor();
+    gen.add(_subsystemSrcUniprocessor);
     configInc _configInc = new configInc();
     gen.add(_configInc);
     gen.create();

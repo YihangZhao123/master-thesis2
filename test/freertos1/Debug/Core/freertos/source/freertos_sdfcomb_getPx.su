@@ -1,0 +1,5 @@
+freertos_sdfcomb_getPx.c:37:20:write_channel_in_gx	32	static
+freertos_sdfcomb_getPx.c:46:20:write_channel_in_gy	32	static
+freertos_sdfcomb_getPx.c:55:6:timer_getPx_callback	16	static
+freertos_sdfcomb_getPx.c:60:20:combinator	24	static
+freertos_sdfcomb_getPx.c:71:6:task_getPx	48	dynamic

@@ -1,14 +1,13 @@
 package template.nonRTOS.fifo.circular.A
 
-import generator.generator
 import forsyde.io.java.core.Vertex
-import forsyde.io.java.core.ForSyDeSystemGraph
-import utils.Name
 import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel
-import utils.Save
+import generator.generator
 import template.Template
 import utils.Global
+import utils.Name
 import utils.Query
+import utils.Save
 
 class channelSrc implements Template{
 

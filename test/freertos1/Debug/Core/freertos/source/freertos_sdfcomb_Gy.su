@@ -1,0 +1,5 @@
+freertos_sdfcomb_Gy.c:36:20:read_channel_in_gy	32	static
+freertos_sdfcomb_Gy.c:46:20:write_channel_in_resy	32	static
+freertos_sdfcomb_Gy.c:55:6:timer_Gy_callback	16	static
+freertos_sdfcomb_Gy.c:60:20:combinator	24	static
+freertos_sdfcomb_Gy.c:71:6:task_Gy	64	dynamic
