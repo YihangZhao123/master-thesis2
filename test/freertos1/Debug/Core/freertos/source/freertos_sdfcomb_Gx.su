@@ -1,5 +1,0 @@
-freertos_sdfcomb_Gx.c:36:20:read_channel_in_gx	32	static
-freertos_sdfcomb_Gx.c:46:20:write_channel_in_resx	32	static
-freertos_sdfcomb_Gx.c:55:6:timer_Gx_callback	16	static
-freertos_sdfcomb_Gx.c:60:20:combinator	24	static
-freertos_sdfcomb_Gx.c:71:6:task_Gx	64	dynamic
