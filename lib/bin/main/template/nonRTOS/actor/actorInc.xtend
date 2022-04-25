@@ -11,7 +11,7 @@ import utils.Name
 import generator.*
 import forsyde.io.java.typed.viewers.moc.sdf.SDFComb
 import utils.Save
-
+import static extension utils.Query.getChannelName
 class actorInc implements Template {
 	override create() {
 		var set = Global.model.vertexSet()
@@ -33,22 +33,22 @@ class actorInc implements Template {
 		var tmp = name.toUpperCase()
 		tmp = tmp+"_H_"
 		
-		var sdfchannels=Global.model.vertexSet()
-							 .stream()
-							 .filter([v|SDFChannel::conforms(v)])
-							 .map([v|SDFChannel::enforce(v)])
-							 .collect(Collectors.toSet())
-		
-
-
 		var out= Global.model.outgoingEdgesOf(vertex).stream()
-									.filter([edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)])
+									.filter([
+										edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) 
+											||	edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT)
+									])
 									.map([e|e.getSourcePort().get()])
 									.collect(Collectors.toSet())
 		
 		
 		var in = Global.model.incomingEdgesOf(vertex).stream()
-									.filter([edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)])
+									.filter([
+										edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)
+										||	edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT)
+									]
+											
+									)
 									.map([e|e.getTargetPort().get()])
 									.collect(Collectors.toSet())
 
@@ -58,9 +58,12 @@ class actorInc implements Template {
 					
 		'''
 			#ifndef  «tmp»
-			#define «tmp»
-			«FOR ch:sdfchannels SEPARATOR "" AFTER "\n" »
-				#include "../inc/sdfchannel_«Name.name(ch)».h"
+			#define «tmp»			
+			«FOR port : inputPorts SEPARATOR "" AFTER "" »
+				#include "../inc/sdfchannel_«getChannelName(vertex,port,Global.model)».h"
+			«ENDFOR»
+			«FOR port : outputPorts SEPARATOR "" AFTER "" »
+				#include "../inc/sdfchannel_«getChannelName(vertex,port,Global.model)».h"
 			«ENDFOR»
 			void actor_«name»(«actorhelp.actorParameterSignature(vertex, inputPorts,outputPorts)»);
 			

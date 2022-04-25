@@ -25,6 +25,7 @@ public class demo1 {
     generator gen = new generator(model, root);
     channelInc _channelInc = new channelInc();
     gen.add(_channelInc);
+    InputOutput.<String>println("inc end");
     channelSrc _channelSrc = new channelSrc();
     gen.add(_channelSrc);
     spinlock _spinlock = new spinlock();

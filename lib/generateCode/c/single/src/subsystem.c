@@ -2,17 +2,21 @@
 	extern circularFIFO_absysig channel_absysig;
 	extern token_absysig arr_absysig[];
 	extern int buffersize_absysig;
+	
 	extern circularFIFO_gxsig channel_gxsig;
 	extern token_gxsig arr_gxsig[];
 	extern int buffersize_gxsig;
+	
 	extern circularFIFO_gysig channel_gysig;
 	extern token_gysig arr_gysig[];
 	extern int buffersize_gysig;
+	
 	extern circularFIFO_absxsig channel_absxsig;
 	extern token_absxsig arr_absxsig[];
 	extern int buffersize_absxsig;
-
-	void subsystem(){
+	extern circularFIFO_outputImage channel_outputImage;
+	extern circularFIFO_inputImage channel_inputImage;
+void subsystem(){
 	//create internal channels
 	/*
 	 create sdf channels 
@@ -28,8 +32,9 @@
 		
 	while(1){
 		/*round robin*/
-		actor_getPx(&channel_gxsig,6,
-		&channel_gysig,6
+		actor_getPx(&channel_inputImage,1
+		 ,&channel_gxsig,6 
+		,&channel_gysig,6
 		);
 		
 		actor_Gx(&channel_gxsig,6
@@ -42,6 +47,7 @@
 		
 		actor_Abs(&channel_absxsig,1,
 		&channel_absysig,1
+		 ,&channel_outputImage,1
 		);
 
 				

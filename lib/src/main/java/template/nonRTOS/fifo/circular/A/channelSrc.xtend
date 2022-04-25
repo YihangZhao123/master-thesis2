@@ -1,6 +1,7 @@
 package template.nonRTOS.fifo.circular.A
 
 import forsyde.io.java.core.Vertex
+
 import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel
 import generator.generator
 import template.Template
@@ -16,17 +17,25 @@ class channelSrc implements Template{
 	}
 	
 	override create(){
-		 Global.model.vertexSet()
-			.stream()
-			.filter([v|SDFChannel::conforms(v)])
-			.forEach([
-				v| Save.save(path(v) ,v.src())
-			]
-			)		
+		Global.model.vertexSet()
+					.stream()
+					.filter([v|v.hasTrait("impl::TokenizableDataBlock")])
+					.forEach([v|Save.save(path(v),v.src())])
+//		 Global.model.vertexSet()
+//			.stream()
+//			.filter([v|SDFChannel::conforms(v)])
+//			.forEach([
+//				v| Save.save(path(v) ,v.src())
+//			]
+//			)	
+
+
+
 	}
 	
 	def String src(Vertex vertex) {
 		var name = vertex.getIdentifier()
+		
 		'''
 			
 			#include "../inc/sdfchannel_«name.replace("/","_")».h"
@@ -34,10 +43,9 @@ class channelSrc implements Template{
 			#include <stdio.h>
 			
 			volatile spinlock spinlock_«name»={.flag=0};
-			«var sdfchannel=SDFChannel.enforce(vertex)»
-			«var long buffersize=Query.getBufferSize(sdfchannel)»
-			
-			int buffersize_«name» = «buffersize+1»;
+			«var long buffersize=Query.getBufferSize(vertex)»
+		
+			unsigned long buffersize_«name» = «buffersize+1»;
 			volatile token_«name» arr_«name»[«buffersize+1»];
 			circularFIFO_«name» channel_«name»;
 			

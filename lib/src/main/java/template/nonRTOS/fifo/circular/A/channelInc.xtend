@@ -1,11 +1,11 @@
 package template.nonRTOS.fifo.circular.A
 
 import forsyde.io.java.core.Vertex
-import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel
 import generator.generator
 import template.Template
 import utils.Global
 import utils.Name
+import utils.Query
 import utils.Save
 
 class channelInc implements Template{
@@ -15,22 +15,18 @@ class channelInc implements Template{
 	}
 	
 	override create(){
-		 Global.model.vertexSet()
-			.stream()
-			.filter([v|SDFChannel::conforms(v)])
-			.forEach([
-				v| Save.save(path(v) ,v.inc())
-			]
-			)
+		Global.model.vertexSet()
+					.stream()
+					.filter([v|v.hasTrait("impl::TokenizableDataBlock")])
+					.forEach([v|Save.save(path(v),v.inc())])			
 			
 	}	
 
 	def String inc(Vertex vertex) {
 		//println(vertex)
 		val name = Name.name(vertex)
-		var SDFChannel  channel = SDFChannel.enforce(vertex)
 		var String tmp = name.toUpperCase();
-		var token_size = channel.getTokenSizeInBits()
+		var token_size = Query.getTokenSizeInBits(vertex)
 		
 		'''
 			#ifndef                   «tmp»_H_
@@ -80,7 +76,6 @@ class channelInc implements Template{
 		'''		
 	}
 	private def String path(Vertex vertex){
-		//println(generator.root+"/channelLibrary/include/sdfchannel_"+Name.name(vertex)+".h")
 		return generator.root+"/inc/sdfchannel_"+Name.name(vertex)+".h"
 	}
 	

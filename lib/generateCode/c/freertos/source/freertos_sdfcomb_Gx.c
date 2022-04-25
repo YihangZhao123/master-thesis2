@@ -21,7 +21,6 @@ extern QueueHandle_t msg_queue_gxsig;
 extern QueueHandle_t msg_queue_absxsig;
 
 
-
 /*
 * Task Stack
 */

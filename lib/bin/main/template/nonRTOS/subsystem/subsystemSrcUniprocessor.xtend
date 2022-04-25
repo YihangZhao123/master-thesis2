@@ -42,6 +42,12 @@ class subsystemSrcUniprocessor implements Template{
 								.stream()
 								.filter([v|SDFComb.conforms(v)])
 								.collect(Collectors.toSet()) 
+								
+		var system_in_out = Global.model.vertexSet()
+								.stream()
+								.filter([v|v.hasTrait("impl::TokenizableDataBlock")])
+								.filter([v|!v.hasTrait("moc::sdf::SDFChannel")])
+								.collect(Collectors.toSet())
 		// get the firing set
 		var firingSet = new TreeMap<Integer,Vertex>();
 		for(Vertex v:sdfCombSet ){
@@ -53,11 +59,14 @@ class subsystemSrcUniprocessor implements Template{
 		
 		'''
 			#include "../inc/subsystem.h"
-				«FOR channel:sdfChannelSet  SEPARATOR "" AFTER "\n" »
+				«FOR channel:sdfChannelSet  SEPARATOR "\n" AFTER "" »
 					«var channelName=Name.name(channel)»
 					extern circularFIFO_«channelName» channel_«channelName»;
 					extern token_«channelName» arr_«channelName»[];
 					extern int buffersize_«channelName»;
+				«ENDFOR»
+				«FOR channel:system_in_out  SEPARATOR "" AFTER "" »
+					extern circularFIFO_«Name.name(channel)» channel_«Name.name(channel)»;
 				«ENDFOR»
 			void subsystem(){
 				//create internal channels

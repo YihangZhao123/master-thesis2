@@ -18,19 +18,6 @@ class generator {
 	new(ForSyDeSystemGraph model,String root){
 		this.root=root
 		Global.model=model
-		
-//		var include=root+"/include"
-//		var src=root+"/source"
-//		
-//		var f1 = new File(include)
-//		if(!f1.exists()){
-//			f1.mkdirs()		
-//		}	
-//		
-//		f1 = new File(src)
-//		if(!f1.exists()){
-//			f1.mkdirs()		
-//		}
 	}
 	
 	def create() {

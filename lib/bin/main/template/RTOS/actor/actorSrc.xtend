@@ -2,6 +2,8 @@ package template.RTOS.actor
 
 import forsyde.io.java.core.EdgeTrait
 
+
+
 import forsyde.io.java.core.Vertex
 import forsyde.io.java.typed.viewers.moc.sdf.SDFComb
 import generator.generator
@@ -15,6 +17,7 @@ import utils.Query
 import utils.Save
 
 import static extension utils.Query.getSDFChannelName
+import static extension utils.Query.getChannelName
 import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel
 
 class actorSrc  implements Template {
@@ -34,20 +37,28 @@ class actorSrc  implements Template {
 	
 	def String createSource(Vertex vertex){
 		
-		var allDataEdges = Query.allDataEdges(vertex,Global.model)
+//		var allDataEdges = Query.allDataEdges(vertex,Global.model)
 		
 
 		
 		var out= Global.model.outgoingEdgesOf(vertex).stream()
-									.filter([edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)])
+									.filter([
+										edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) 
+											||	edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT)
+									])
 									.map([e|e.getSourcePort().get()])
 									.collect(Collectors.toSet())
-
+		
 		
 		var in = Global.model.incomingEdgesOf(vertex).stream()
-									.filter([edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)])
+									.filter([
+										edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)
+										||	edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT)
+									]
+											
+									)
 									.map([e|e.getTargetPort().get()])
-									.collect(Collectors.toSet())
+									.collect(Collectors.toSet())	
 
 		
 		var TreeSet<String> inputPorts =new TreeSet(in)
@@ -73,9 +84,12 @@ class actorSrc  implements Template {
 			/*
 			* Message Queue
 			*/
-			«FOR e: allDataEdges SEPARATOR "" AFTER "\n"»
-				extern QueueHandle_t msg_queue_«e»;
-			«ENDFOR»
+			«FOR port : inputPorts SEPARATOR "" AFTER "" »
+			extern QueueHandle_t msg_queue_«Query.getChannelName(vertex,port,Global.model)»;
+			«ENDFOR»			
+			«FOR port : outputPorts SEPARATOR "" AFTER "" »
+			extern QueueHandle_t msg_queue_«Query.getChannelName(vertex,port,Global.model)»;
+			«ENDFOR»	
 			
 			
 			/*
@@ -125,7 +139,7 @@ class actorSrc  implements Template {
 				//array aiming to storing data from input ports
 				«FOR port:inputPorts  SEPARATOR "\n" AFTER "\n"»
 					long «port»_rate = «Query.getPortRate(SDFComb.enforce(vertex),port)»;
-					token_«vertex.getSDFChannelName(port,Global.model)» «port»[«port»_rate];
+					token_«vertex.getChannelName(port,Global.model)» «port»[«port»_rate];
 				«ENDFOR»
 				
 				//array aiming to writing data to input ports
@@ -138,7 +152,7 @@ class actorSrc  implements Template {
 					*	read from channel
 					*/
 					«FOR port : inputPorts SEPARATOR "" AFTER "" »
-						read_channel_in_«port»(msg_queue_«vertex.getSDFChannelName(port,Global.model)»,«port»_rate,«port»);
+						read_channel_in_«port»(msg_queue_«vertex.getChannelName(port,Global.model)»,«port»_rate,«port»);
 					«ENDFOR»	
 					/*
 					*	combinator function

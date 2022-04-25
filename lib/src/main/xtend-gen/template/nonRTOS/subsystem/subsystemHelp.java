@@ -25,7 +25,7 @@ public class subsystemHelp {
       String name = Name.name(vertex);
       final Predicate<EdgeInfo> _function = new Predicate<EdgeInfo>() {
         public boolean test(final EdgeInfo edgeinfo) {
-          return edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE);
+          return (edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) || edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT));
         }
       };
       final Function<EdgeInfo, String> _function_1 = new Function<EdgeInfo, String>() {
@@ -36,7 +36,7 @@ public class subsystemHelp {
       Set<String> out = Global.model.outgoingEdgesOf(vertex).stream().filter(_function).<String>map(_function_1).collect(Collectors.<String>toSet());
       final Predicate<EdgeInfo> _function_2 = new Predicate<EdgeInfo>() {
         public boolean test(final EdgeInfo edgeinfo) {
-          return edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE);
+          return (edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) || edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT));
         }
       };
       final Function<EdgeInfo, String> _function_3 = new Function<EdgeInfo, String>() {

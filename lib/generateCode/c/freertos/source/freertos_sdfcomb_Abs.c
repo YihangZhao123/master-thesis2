@@ -17,9 +17,9 @@
 /*
 * Message Queue
 */
-extern QueueHandle_t msg_queue_absysig;
 extern QueueHandle_t msg_queue_absxsig;
-
+extern QueueHandle_t msg_queue_absysig;
+extern QueueHandle_t msg_queue_outputImage;
 
 
 /*
@@ -52,6 +52,15 @@ inline static void read_channel_in_resy(QueueHandle_t src_msg_queue, size_t num,
 }
 
 
+inline static void write_channel_in_imgOutput(token_outputImage src[],size_t num,QueueHandle_t dst_msg_queue){
+	
+	for(size_t i=0 ; i < num ;++i){
+		// portMAX_DELAY: INCLUDE_vTaskSuspend is set to 1 in FreeRTOSConfig.h.
+		// block forever
+		BaseType_t ret=	xQueueSend(dst_msg_queue,src+i,portMAX_DELAY);
+	}
+}
+
 void timer_Abs_callback(TimerHandle_t xTimer){
 	xSemaphoreGive(task_sem_Abs);
 }				
@@ -60,6 +69,7 @@ void timer_Abs_callback(TimerHandle_t xTimer){
 inline static void combinator(	
 token_absxsig resx[] , const size_t resx_rate,
 token_absysig resy[] , const size_t resy_rate
+ ,token_outputImage  imgOutput[],const size_t imgOutput_rate
 ){
 	printf("in actor Abs\n");
 
@@ -76,7 +86,10 @@ void task_Abs(void* pdata){
 
 		
 	//array aiming to writing data to input ports
-	while(1){
+	long imgOutput_rate = 1;
+	token_outputImage imgOutput[imgOutput_rate];
+
+		while(1){
 		/*
 		*	read from channel
 		*/
@@ -85,11 +98,12 @@ void task_Abs(void* pdata){
 		/*
 		*	combinator function
 		*/
-		combinator(resx,resx_rate,resy,resy_rate );	
+		combinator(resx,resx_rate,resy,resy_rate , imgOutput,imgOutput_rate );	
 	
 		/*
 		*	write from channel
 		*/
+		write_channel_in_imgOutput(imgOutput,imgOutput_rate,msg_queue_outputImage);
 		
 		xSemaphoreTake(task_sem_Abs, portMAX_DELAY);	
 			

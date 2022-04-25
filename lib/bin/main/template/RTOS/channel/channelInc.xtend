@@ -15,7 +15,7 @@ class channelInc implements Template{
 	override create() { 
 		 Global.model.vertexSet()
 			.stream()
-			.filter([v|SDFChannel::conforms(v)])
+			.filter([v|v.hasTrait("impl::TokenizableDataBlock")])
 			.forEach([
 				v| Save.save(path(v) ,v.createHeader())
 			]

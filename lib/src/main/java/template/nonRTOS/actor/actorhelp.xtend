@@ -1,10 +1,12 @@
 package template.nonRTOS.actor
 
 import forsyde.io.java.core.Vertex
+
 import java.util.Set
 import utils.Name
 
 import static extension utils.Query.getSDFChannelName
+import static extension utils.Query.getChannelName
 import utils.Global
 
 class actorhelp {
@@ -66,4 +68,5 @@ class actorhelp {
 			«ENDIF»
 		'''
 	}
+
 }

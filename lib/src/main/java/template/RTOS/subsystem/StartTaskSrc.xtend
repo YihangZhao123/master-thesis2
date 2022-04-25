@@ -24,7 +24,12 @@ class StartTaskSrc implements Template {
 		var sdfCombSet = Global.model.vertexSet()
 								.stream()
 								.filter([v|SDFComb.conforms(v)])
-								.collect(Collectors.toSet())		
+								.collect(Collectors.toSet())	
+		var system_in_out = Global.model.vertexSet()
+								.stream()
+								.filter([v|v.hasTrait("impl::TokenizableDataBlock")])
+								.filter([v|!v.hasTrait("moc::sdf::SDFChannel")])
+								.collect(Collectors.toSet())			
 		'''
 			#include "../include/freertos_StartTask.h"
 			«FOR channel :sdfChannelSet SEPARATOR "" AFTER"\n"  »
@@ -51,7 +56,9 @@ class StartTaskSrc implements Template {
 				extern long item_size_«Name.name(channel)»;
 				extern QueueHandle_t msg_queue_«Name.name(channel)»;
 			«ENDFOR»
-			
+			«FOR e :system_in_out SEPARATOR "" AFTER"\n"  »
+				extern QueueHandle_t msg_queue_«Name.name(e)»;
+			«ENDFOR»			
 			
 			/**************************
 			*			Soft Timer and semaphore

@@ -1,9 +1,13 @@
 package demo
 import utils.Load
+
 import generator.generator
 import template.RTOS.actor.*
 import template.RTOS.channel.*
 import template.RTOS.subsystem.*
+/**
+ * RTOS
+ */
 class demo3 {
 	def static void main(String[] args) {
 		val forsyde="forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";

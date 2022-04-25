@@ -16,7 +16,7 @@ public class channelInc implements Template {
   public void create() {
     final Predicate<Vertex> _function = new Predicate<Vertex>() {
       public boolean test(final Vertex v) {
-        return (SDFChannel.conforms(v)).booleanValue();
+        return (v.hasTrait("impl::TokenizableDataBlock")).booleanValue();
       }
     };
     final Consumer<Vertex> _function_1 = new Consumer<Vertex>() {

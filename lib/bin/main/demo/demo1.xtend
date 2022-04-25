@@ -17,13 +17,14 @@ import utils.Load
 class demo1 {
 	def static void main(String[] args) {
 		val forsyde="forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";
-		//val forsyde="forsyde-io\\test1.forsyde.xmi"
+		
 		val root="generateCode\\c\\single"
 		var model = Load.load(forsyde);	
 		
 		var gen = new generator(model,root)
 		
 		gen.add(new channelInc())
+		println("inc end")
 		gen.add(new channelSrc())
 		gen.add(new spinlock())
 		

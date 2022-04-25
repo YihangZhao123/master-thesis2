@@ -43,6 +43,8 @@ extern int queue_length_absxsig;
 extern long item_size_absxsig;
 extern QueueHandle_t msg_queue_absxsig;
 
+extern QueueHandle_t msg_queue_outputImage;
+extern QueueHandle_t msg_queue_inputImage;
 
 
 /**************************

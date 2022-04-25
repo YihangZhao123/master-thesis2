@@ -1,7 +1,6 @@
 package template.RTOS.channel;
 
 import forsyde.io.java.core.Vertex;
-import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel;
 import generator.generator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -17,7 +16,7 @@ public class channelSrc implements Template {
   public void create() {
     final Predicate<Vertex> _function = new Predicate<Vertex>() {
       public boolean test(final Vertex v) {
-        return (SDFChannel.conforms(v)).booleanValue();
+        return (v.hasTrait("impl::TokenizableDataBlock")).booleanValue();
       }
     };
     final Consumer<Vertex> _function_1 = new Consumer<Vertex>() {
@@ -45,14 +44,14 @@ public class channelSrc implements Template {
       _builder.append("int queue_length_");
       _builder.append(name);
       _builder.append(" = ");
-      int _bufferSize = Query.getBufferSize(SDFChannel.enforce(vertex));
+      int _bufferSize = Query.getBufferSize(vertex);
       _builder.append(_bufferSize);
       _builder.append(";");
       _builder.newLineIfNotEmpty();
       _builder.append("long item_size_");
       _builder.append(name);
       _builder.append(" = ");
-      long _tokenSize = Query.getTokenSize(SDFChannel.enforce(vertex));
+      long _tokenSize = Query.getTokenSize(vertex);
       _builder.append(_tokenSize);
       _builder.append(";");
       _builder.newLineIfNotEmpty();

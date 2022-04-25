@@ -19,15 +19,23 @@ class subsystemHelp {
 	static def String actorParameter( Vertex vertex){
 		var name =Name.name(vertex)
 		var out= Global.model.outgoingEdgesOf(vertex).stream()
-									.filter([edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)])
+									.filter([
+										edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) 
+											||	edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT)
+									])
 									.map([e|e.getSourcePort().get()])
 									.collect(Collectors.toSet())
 		
 		
 		var in = Global.model.incomingEdgesOf(vertex).stream()
-									.filter([edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)])
+									.filter([
+										edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)
+										||	edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT)
+									]
+											
+									)
 									.map([e|e.getTargetPort().get()])
-									.collect(Collectors.toSet())
+									.collect(Collectors.toSet())	
 
 		
 		var TreeSet<String> inputPorts =new TreeSet(in)

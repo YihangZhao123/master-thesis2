@@ -12,6 +12,9 @@ import template.RTOS.subsystem.StartTaskInc;
 import template.RTOS.subsystem.StartTaskSrc;
 import utils.Load;
 
+/**
+ * RTOS
+ */
 @SuppressWarnings("all")
 public class demo3 {
   public static void main(final String[] args) {

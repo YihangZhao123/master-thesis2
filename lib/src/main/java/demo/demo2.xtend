@@ -16,9 +16,10 @@ import utils.Load
 class demo2 {
 	def static void main(String[] args) {
 		val forsyde="forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";
+		val path2= "forsyde-io\\sobel-application.fiodl"
 		//val forsyde="forsyde-io\\test1.forsyde.xmi"
 		val root="generateCode\\c\\multi"
-		var model = Load.load(forsyde);	
+		var model = Load.load(path2);	
 		
 		var gen = new generator(model,root)
 		

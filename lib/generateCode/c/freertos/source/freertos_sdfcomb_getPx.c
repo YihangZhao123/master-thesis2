@@ -17,9 +17,9 @@
 /*
 * Message Queue
 */
+extern QueueHandle_t msg_queue_inputImage;
 extern QueueHandle_t msg_queue_gxsig;
 extern QueueHandle_t msg_queue_gysig;
-
 
 
 /*
@@ -32,6 +32,15 @@ StaticTask_t tcb_getPx;
 */
 SemaphoreHandle_t task_sem_getPx;
 TimerHandle_t task_timer_getPx;
+
+inline static void read_channel_in_imgInput(QueueHandle_t src_msg_queue, size_t num, token_inputImage  dst[]){
+	
+	for(size_t i=0;i <num;++i){
+		// portMAX_DELAY: INCLUDE_vTaskSuspend is set to 1 in FreeRTOSConfig.h.
+		// block forever
+		xQueueReceive(src_msg_queue,dst+i, portMAX_DELAY);		
+	}
+}
 
 
 inline static void write_channel_in_gx(token_gxsig src[],size_t num,QueueHandle_t dst_msg_queue){
@@ -58,8 +67,9 @@ void timer_getPx_callback(TimerHandle_t xTimer){
 
 //void func_actorName_combinator(portName[], portName_rate ....)
 inline static void combinator(	
-token_gxsig gx[],const size_t gx_rate,
-token_gysig gy[],const size_t gy_rate
+token_inputImage imgInput[] , const size_t imgInput_rate
+ ,token_gxsig  gx[],const size_t gx_rate 
+,token_gysig  gy[],const size_t gy_rate
 ){
 	printf("in actor getPx\n");
 
@@ -68,7 +78,10 @@ token_gysig gy[],const size_t gy_rate
 			
 void task_getPx(void* pdata){
 	//array aiming to storing data from input ports
-	
+	long imgInput_rate = 1;
+	token_inputImage imgInput[imgInput_rate];
+
+		
 	//array aiming to writing data to input ports
 	long gx_rate = 6;
 	token_gxsig gx[gx_rate];
@@ -80,10 +93,11 @@ void task_getPx(void* pdata){
 		/*
 		*	read from channel
 		*/
+		read_channel_in_imgInput(msg_queue_inputImage,imgInput_rate,imgInput);
 		/*
 		*	combinator function
 		*/
-		combinator(gx,gx_rate,gy,gy_rate );	
+		combinator(imgInput,imgInput_rate , gx,gx_rate , gy,gy_rate );	
 	
 		/*
 		*	write from channel

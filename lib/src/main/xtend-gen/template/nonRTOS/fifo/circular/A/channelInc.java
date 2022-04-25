@@ -1,7 +1,6 @@
 package template.nonRTOS.fifo.circular.A;
 
 import forsyde.io.java.core.Vertex;
-import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel;
 import generator.generator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -9,6 +8,7 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 import template.Template;
 import utils.Global;
 import utils.Name;
+import utils.Query;
 import utils.Save;
 
 @SuppressWarnings("all")
@@ -19,7 +19,7 @@ public class channelInc implements Template {
   public void create() {
     final Predicate<Vertex> _function = new Predicate<Vertex>() {
       public boolean test(final Vertex v) {
-        return (SDFChannel.conforms(v)).booleanValue();
+        return (v.hasTrait("impl::TokenizableDataBlock")).booleanValue();
       }
     };
     final Consumer<Vertex> _function_1 = new Consumer<Vertex>() {
@@ -34,9 +34,8 @@ public class channelInc implements Template {
     String _xblockexpression = null;
     {
       final String name = Name.name(vertex);
-      SDFChannel channel = SDFChannel.enforce(vertex);
       String tmp = name.toUpperCase();
-      Long token_size = channel.getTokenSizeInBits();
+      long token_size = Query.getTokenSizeInBits(vertex);
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("#ifndef                   ");
       _builder.append(tmp);
@@ -63,16 +62,16 @@ public class channelInc implements Template {
       _builder.newLine();
       _builder.append("typedef ");
       {
-        if (((token_size).longValue() == 8)) {
+        if ((token_size == 8)) {
           _builder.append("uint8_t");
         } else {
-          if (((token_size).longValue() == 16)) {
+          if ((token_size == 16)) {
             _builder.append("uint16_t");
           } else {
-            if (((token_size).longValue() == 32)) {
+            if ((token_size == 32)) {
               _builder.append("uint32_t");
             } else {
-              if (((token_size).longValue() == 64)) {
+              if ((token_size == 64)) {
                 _builder.append("uint64_t");
               } else {
                 _builder.append(" uint64_t");

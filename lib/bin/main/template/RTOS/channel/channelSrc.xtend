@@ -15,7 +15,7 @@ class channelSrc   implements Template {
 	override create() {
 		 Global.model.vertexSet()
 			.stream()
-			.filter([v|SDFChannel::conforms(v)])
+			.filter([v|v.hasTrait("impl::TokenizableDataBlock")])
 			.forEach([
 				v| Save.save(path(v) ,v.createSource())
 			]
@@ -28,8 +28,8 @@ class channelSrc   implements Template {
 		'''
 			#include "../include/freertos_sdfchannel_«name.replace("/","_")».h"
 			QueueHandle_t msg_queue_«name»;
-			int queue_length_«name» = «Query.getBufferSize(SDFChannel.enforce(vertex))»;
-			long item_size_«name» = «Query.getTokenSize(SDFChannel.enforce(vertex)) »;
+			int queue_length_«name» = «Query.getBufferSize(vertex)»;
+			long item_size_«name» = «Query.getTokenSize(vertex)»;
 		'''
 
 	}

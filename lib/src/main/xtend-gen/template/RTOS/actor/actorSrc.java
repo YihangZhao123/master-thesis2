@@ -36,10 +36,9 @@ public class actorSrc implements Template {
   public String createSource(final Vertex vertex) {
     String _xblockexpression = null;
     {
-      Set<String> allDataEdges = Query.allDataEdges(vertex, Global.model);
       final Predicate<EdgeInfo> _function = new Predicate<EdgeInfo>() {
         public boolean test(final EdgeInfo edgeinfo) {
-          return edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE);
+          return (edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) || edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT));
         }
       };
       final Function<EdgeInfo, String> _function_1 = new Function<EdgeInfo, String>() {
@@ -50,7 +49,7 @@ public class actorSrc implements Template {
       Set<String> out = Global.model.outgoingEdgesOf(vertex).stream().filter(_function).<String>map(_function_1).collect(Collectors.<String>toSet());
       final Predicate<EdgeInfo> _function_2 = new Predicate<EdgeInfo>() {
         public boolean test(final EdgeInfo edgeinfo) {
-          return edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE);
+          return (edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) || edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT));
         }
       };
       final Function<EdgeInfo, String> _function_3 = new Function<EdgeInfo, String>() {
@@ -118,19 +117,38 @@ public class actorSrc implements Template {
       _builder.newLine();
       {
         boolean _hasElements_1 = false;
-        for(final String e : allDataEdges) {
+        for(final String port : inputPorts) {
           if (!_hasElements_1) {
             _hasElements_1 = true;
           } else {
             _builder.appendImmediate("", "");
           }
           _builder.append("extern QueueHandle_t msg_queue_");
-          _builder.append(e);
+          String _channelName = Query.getChannelName(vertex, port, Global.model);
+          _builder.append(_channelName);
           _builder.append(";");
           _builder.newLineIfNotEmpty();
         }
         if (_hasElements_1) {
-          _builder.append("\n");
+          _builder.append("");
+        }
+      }
+      {
+        boolean _hasElements_2 = false;
+        for(final String port_1 : outputPorts) {
+          if (!_hasElements_2) {
+            _hasElements_2 = true;
+          } else {
+            _builder.appendImmediate("", "");
+          }
+          _builder.append("extern QueueHandle_t msg_queue_");
+          String _channelName_1 = Query.getChannelName(vertex, port_1, Global.model);
+          _builder.append(_channelName_1);
+          _builder.append(";");
+          _builder.newLineIfNotEmpty();
+        }
+        if (_hasElements_2) {
+          _builder.append("");
         }
       }
       _builder.newLine();
@@ -165,17 +183,17 @@ public class actorSrc implements Template {
       _builder.newLineIfNotEmpty();
       _builder.newLine();
       {
-        boolean _hasElements_2 = false;
-        for(final String port : inputPorts) {
-          if (!_hasElements_2) {
-            _hasElements_2 = true;
+        boolean _hasElements_3 = false;
+        for(final String port_2 : inputPorts) {
+          if (!_hasElements_3) {
+            _hasElements_3 = true;
           } else {
             _builder.appendImmediate(" \n", "");
           }
           _builder.append("inline static void read_channel_in_");
-          _builder.append(port);
+          _builder.append(port_2);
           _builder.append("(QueueHandle_t src_msg_queue, size_t num, token_");
-          String _sDFChannelName = Query.getSDFChannelName(vertex, port, Global.model);
+          String _sDFChannelName = Query.getSDFChannelName(vertex, port_2, Global.model);
           _builder.append(_sDFChannelName);
           _builder.append("  dst[]){");
           _builder.newLineIfNotEmpty();
@@ -199,23 +217,23 @@ public class actorSrc implements Template {
           _builder.append("}");
           _builder.newLine();
         }
-        if (_hasElements_2) {
+        if (_hasElements_3) {
           _builder.append("\n");
         }
       }
       _builder.newLine();
       {
-        boolean _hasElements_3 = false;
-        for(final String port_1 : outputPorts) {
-          if (!_hasElements_3) {
-            _hasElements_3 = true;
+        boolean _hasElements_4 = false;
+        for(final String port_3 : outputPorts) {
+          if (!_hasElements_4) {
+            _hasElements_4 = true;
           } else {
             _builder.appendImmediate(" \n", "");
           }
           _builder.append("inline static void write_channel_in_");
-          _builder.append(port_1);
+          _builder.append(port_3);
           _builder.append("(token_");
-          String _sDFChannelName_1 = Query.getSDFChannelName(vertex, port_1, Global.model);
+          String _sDFChannelName_1 = Query.getSDFChannelName(vertex, port_3, Global.model);
           _builder.append(_sDFChannelName_1);
           _builder.append(" src[],size_t num,QueueHandle_t dst_msg_queue){");
           _builder.newLineIfNotEmpty();
@@ -239,7 +257,7 @@ public class actorSrc implements Template {
           _builder.append("}");
           _builder.newLine();
         }
-        if (_hasElements_3) {
+        if (_hasElements_4) {
           _builder.append("\n");
         }
       }
@@ -281,33 +299,33 @@ public class actorSrc implements Template {
       _builder.append("//array aiming to storing data from input ports");
       _builder.newLine();
       {
-        boolean _hasElements_4 = false;
-        for(final String port_2 : inputPorts) {
-          if (!_hasElements_4) {
-            _hasElements_4 = true;
+        boolean _hasElements_5 = false;
+        for(final String port_4 : inputPorts) {
+          if (!_hasElements_5) {
+            _hasElements_5 = true;
           } else {
             _builder.appendImmediate("\n", "\t");
           }
           _builder.append("\t");
           _builder.append("long ");
-          _builder.append(port_2, "\t");
+          _builder.append(port_4, "\t");
           _builder.append("_rate = ");
-          int _portRate = Query.getPortRate(SDFComb.enforce(vertex), port_2);
+          int _portRate = Query.getPortRate(SDFComb.enforce(vertex), port_4);
           _builder.append(_portRate, "\t");
           _builder.append(";");
           _builder.newLineIfNotEmpty();
           _builder.append("\t");
           _builder.append("token_");
-          String _sDFChannelName_2 = Query.getSDFChannelName(vertex, port_2, Global.model);
-          _builder.append(_sDFChannelName_2, "\t");
+          String _channelName_2 = Query.getChannelName(vertex, port_4, Global.model);
+          _builder.append(_channelName_2, "\t");
           _builder.append(" ");
-          _builder.append(port_2, "\t");
+          _builder.append(port_4, "\t");
           _builder.append("[");
-          _builder.append(port_2, "\t");
+          _builder.append(port_4, "\t");
           _builder.append("_rate];");
           _builder.newLineIfNotEmpty();
         }
-        if (_hasElements_4) {
+        if (_hasElements_5) {
           _builder.append("\n", "\t");
         }
       }
@@ -317,33 +335,33 @@ public class actorSrc implements Template {
       _builder.append("//array aiming to writing data to input ports");
       _builder.newLine();
       {
-        boolean _hasElements_5 = false;
-        for(final String port_3 : outputPorts) {
-          if (!_hasElements_5) {
-            _hasElements_5 = true;
+        boolean _hasElements_6 = false;
+        for(final String port_5 : outputPorts) {
+          if (!_hasElements_6) {
+            _hasElements_6 = true;
           } else {
             _builder.appendImmediate("\n", "\t");
           }
           _builder.append("\t");
           _builder.append("long ");
-          _builder.append(port_3, "\t");
+          _builder.append(port_5, "\t");
           _builder.append("_rate = ");
-          int _portRate_1 = Query.getPortRate(SDFComb.enforce(vertex), port_3);
+          int _portRate_1 = Query.getPortRate(SDFComb.enforce(vertex), port_5);
           _builder.append(_portRate_1, "\t");
           _builder.append(";");
           _builder.newLineIfNotEmpty();
           _builder.append("\t");
           _builder.append("token_");
-          String _sDFChannelName_3 = Query.getSDFChannelName(vertex, port_3, Global.model);
-          _builder.append(_sDFChannelName_3, "\t");
+          String _sDFChannelName_2 = Query.getSDFChannelName(vertex, port_5, Global.model);
+          _builder.append(_sDFChannelName_2, "\t");
           _builder.append(" ");
-          _builder.append(port_3, "\t");
+          _builder.append(port_5, "\t");
           _builder.append("[");
-          _builder.append(port_3, "\t");
+          _builder.append(port_5, "\t");
           _builder.append("_rate];");
           _builder.newLineIfNotEmpty();
         }
-        if (_hasElements_5) {
+        if (_hasElements_6) {
           _builder.append("\n", "\t");
         }
       }
@@ -360,27 +378,27 @@ public class actorSrc implements Template {
       _builder.append("*/");
       _builder.newLine();
       {
-        boolean _hasElements_6 = false;
-        for(final String port_4 : inputPorts) {
-          if (!_hasElements_6) {
-            _hasElements_6 = true;
+        boolean _hasElements_7 = false;
+        for(final String port_6 : inputPorts) {
+          if (!_hasElements_7) {
+            _hasElements_7 = true;
           } else {
             _builder.appendImmediate("", "\t\t");
           }
           _builder.append("\t\t");
           _builder.append("read_channel_in_");
-          _builder.append(port_4, "\t\t");
+          _builder.append(port_6, "\t\t");
           _builder.append("(msg_queue_");
-          String _sDFChannelName_4 = Query.getSDFChannelName(vertex, port_4, Global.model);
-          _builder.append(_sDFChannelName_4, "\t\t");
+          String _channelName_3 = Query.getChannelName(vertex, port_6, Global.model);
+          _builder.append(_channelName_3, "\t\t");
           _builder.append(",");
-          _builder.append(port_4, "\t\t");
+          _builder.append(port_6, "\t\t");
           _builder.append("_rate,");
-          _builder.append(port_4, "\t\t");
+          _builder.append(port_6, "\t\t");
           _builder.append(");");
           _builder.newLineIfNotEmpty();
         }
-        if (_hasElements_6) {
+        if (_hasElements_7) {
           _builder.append("", "\t\t");
         }
       }
@@ -411,27 +429,27 @@ public class actorSrc implements Template {
       _builder.append("*/");
       _builder.newLine();
       {
-        boolean _hasElements_7 = false;
-        for(final String port_5 : outputPorts) {
-          if (!_hasElements_7) {
-            _hasElements_7 = true;
+        boolean _hasElements_8 = false;
+        for(final String port_7 : outputPorts) {
+          if (!_hasElements_8) {
+            _hasElements_8 = true;
           } else {
             _builder.appendImmediate("", "\t\t");
           }
           _builder.append("\t\t");
           _builder.append("write_channel_in_");
-          _builder.append(port_5, "\t\t");
+          _builder.append(port_7, "\t\t");
           _builder.append("(");
-          _builder.append(port_5, "\t\t");
+          _builder.append(port_7, "\t\t");
           _builder.append(",");
-          _builder.append(port_5, "\t\t");
+          _builder.append(port_7, "\t\t");
           _builder.append("_rate,msg_queue_");
-          String _sDFChannelName_5 = Query.getSDFChannelName(vertex, port_5, Global.model);
-          _builder.append(_sDFChannelName_5, "\t\t");
+          String _sDFChannelName_3 = Query.getSDFChannelName(vertex, port_7, Global.model);
+          _builder.append(_sDFChannelName_3, "\t\t");
           _builder.append(");");
           _builder.newLineIfNotEmpty();
         }
-        if (_hasElements_7) {
+        if (_hasElements_8) {
           _builder.append("", "\t\t");
         }
       }

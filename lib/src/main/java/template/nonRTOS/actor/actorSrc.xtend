@@ -11,6 +11,7 @@ import utils.Global
 import utils.Name
 import utils.Save
 
+import static extension utils.Query.getChannelName
 import static extension utils.Query.getSDFChannelName
 
 class actorSrc implements Template {
@@ -34,19 +35,26 @@ class actorSrc implements Template {
 		var name = Name.name(vertex)	
 		
 		var out= Global.model.outgoingEdgesOf(vertex).stream()
-									.filter([edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)])
+									.filter([
+										edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) 
+											||	edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT)
+									])
 									.map([e|e.getSourcePort().get()])
 									.collect(Collectors.toSet())
 		
+		
 		var in = Global.model.incomingEdgesOf(vertex).stream()
-									.filter([edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)])
+									.filter([
+										edgeinfo|edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE)
+										||	edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT)
+									]
+											
+									)
 									.map([e|e.getTargetPort().get()])
-									.collect(Collectors.toSet())
-
+									.collect(Collectors.toSet())	
 		
 		var TreeSet<String> inputPorts =new TreeSet(in)
 		var TreeSet<String> outputPorts = new TreeSet(out)
-		
 		'''
 			#include <stdlib.h>
 			#include <stdio.h>
@@ -54,13 +62,13 @@ class actorSrc implements Template {
 			#include "../inc/config.h"
 			#include "../inc/spinlock.h"
 			«FOR port : inputPorts SEPARATOR "" AFTER "" »
-			extern spinlock spinlock_«getSDFChannelName(vertex,port,Global.model)»;
+			extern spinlock spinlock_«getChannelName(vertex,port,Global.model)»;
 			«ENDFOR»
 			«FOR port : outputPorts SEPARATOR "" AFTER "" »
-			extern spinlock spinlock_«getSDFChannelName(vertex,port,Global.model)»;
+			extern spinlock spinlock_«getChannelName(vertex,port,Global.model)»;
 			«ENDFOR»			
 			
-			«FOR port : inputPorts SEPARATOR " \n" AFTER "\n" »
+			«FOR port : inputPorts SEPARATOR "" AFTER "\n" »
 				inline static void read_channel_«name»_«port»(circularFIFO_«getSDFChannelName(vertex,port,Global.model)»* src_channel_ptr, const size_t num, token_«getSDFChannelName(vertex,port,Global.model)»  dst[]){
 					//#if defined SINGLE
 						for(size_t i=0 ; i < num ;++i){
@@ -76,7 +84,7 @@ class actorSrc implements Template {
 				}
 			«ENDFOR»	
 			
-			«FOR port : outputPorts SEPARATOR " \n" AFTER "\n" »
+			«FOR port : outputPorts SEPARATOR "" AFTER "\n" »
 				inline static void write_channel_«name»_«port»(token_«getSDFChannelName(vertex,port,Global.model)» src[],const size_t num,circularFIFO_«getSDFChannelName(vertex,port,Global.model)»* dst_channel_ptr){
 					for(size_t i=0 ; i < num ;++i){
 						#if «getSDFChannelName(vertex,port,Global.model).toUpperCase()»_NONBLOCKING==1
@@ -97,16 +105,16 @@ class actorSrc implements Template {
 				
 			inline void actor_«name»(«actorhelp.actorParameterSignature(vertex,inputPorts,outputPorts)»){
 			
-				«FOR port:inputPorts  SEPARATOR "\n" AFTER "\n"»
-					token_«vertex.getSDFChannelName(port,Global.model)» «port»[«port»_rate];
+				«FOR port:inputPorts  SEPARATOR "" AFTER ""»
+					token_«vertex.getChannelName(port,Global.model)» «port»[«port»_rate];
 				«ENDFOR»
-				//array aiming to writing data to input ports
-				«FOR port :outputPorts SEPARATOR "\n" AFTER "\n"»
-					token_«vertex.getSDFChannelName(port,Global.model)» «port»[«port»_rate];
+				«FOR port :outputPorts SEPARATOR "" AFTER ""»
+					token_«vertex.getChannelName(port,Global.model)» «port»[«port»_rate];
 				«ENDFOR»
 				«FOR port : inputPorts SEPARATOR " \n" AFTER "\n" »
 					read_channel_«name»_«port»(channel_«port»_ptr,«port»_rate,«port»);
-				«ENDFOR»	
+				«ENDFOR»
+					
 				combinator(«actorhelp.funcParameter(vertex,inputPorts,outputPorts)»);	
 				«FOR port : outputPorts SEPARATOR " \n" AFTER "\n" »
 					write_channel_«name»_«port»(«port»,«port»_rate,channel_«port»_ptr);
