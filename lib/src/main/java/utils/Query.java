@@ -1,14 +1,11 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import forsyde.io.java.core.EdgeInfo;
-import forsyde.io.java.core.EdgeTrait;
 import forsyde.io.java.core.ForSyDeSystemGraph;
-import forsyde.io.java.core.Trait;
 import forsyde.io.java.core.Vertex;
 import forsyde.io.java.core.VertexAcessor;
 import forsyde.io.java.core.VertexProperty;
@@ -160,37 +157,29 @@ public class Query {
 		}	
 		
 	}
-//	public static Set<String> allDataEdges(Vertex vertex,ForSyDeSystemGraph model){
-//		Set<String> allDataEdges = model.outgoingEdgesOf(vertex)
-//										.stream()
-//										.filter(edgeinfo->edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE))
-//										.map(e->e.getTarget())
-//										.collect(Collectors.toSet());	
-//		
-//		allDataEdges.addAll(
-//				model.incomingEdgesOf(vertex)
-//				.stream()
-//				.filter(edgeinfo->edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE))
-//				.map(e->e.getSource())
-//				.collect(Collectors.toSet())				
-//				);
-//	return allDataEdges;
-//	}
+
 	
 	/**
 	 * @param vertex	vertex must be a has trait SDFComb
 	 */
-	public static  long getWCET(Vertex vertex,ForSyDeSystemGraph model) {
-//		Set<EdgeInfo> edgeinfos=  model.incomingEdgesOf(vertex);
-//		edgeinfos.stream().filter(e->e.hasTrait())
+	public static  int getWCET(Vertex vertex,ForSyDeSystemGraph model) {
+		 Optional<Vertex> a;
+		 Set<Vertex> wcet=new HashSet<>();
+		for(Vertex v: model.vertexSet()) {
+			if(v.hasTrait("WCET")) {
+				wcet.add(v);
+				
+			}
+		}
 		
-
-//		for(Vertex v: model.vertexSet()) {
-//			for(Trait t :v.vertexTraits) {
-//				var a =t.getName();
-//				
-//			}
-//		}
-		return 4000;
+		for(Vertex v:wcet) {
+			a= VertexAcessor.getNamedPort(model, v,"application",VertexTrait.MOC_SDF_SDFCOMB );
+			if(a.isPresent()&&a.get()==vertex) {
+				Map<String, VertexProperty> b = v.getProperties();
+				int c = (int)b.get("time").unwrap();
+				return c;
+			 }
+		}
+		return 1;
 	}
 }

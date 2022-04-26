@@ -76,7 +76,7 @@ void StartTask(void* pdata){
 	*/				
 	task_timer_Gx=xTimerCreate(
 											"timer_Gx"
-											, pdMS_TO_TICKS(4000)
+											, pdMS_TO_TICKS(4147)
 											, pdTRUE
 											,0
 											,timer_Gx_callback
@@ -85,7 +85,7 @@ void StartTask(void* pdata){
 	task_sem_Gx=xSemaphoreCreateBinary();
 	task_timer_Abs=xTimerCreate(
 											"timer_Abs"
-											, pdMS_TO_TICKS(4000)
+											, pdMS_TO_TICKS(1411)
 											, pdTRUE
 											,0
 											,timer_Abs_callback
@@ -94,7 +94,7 @@ void StartTask(void* pdata){
 	task_sem_Abs=xSemaphoreCreateBinary();
 	task_timer_Gy=xTimerCreate(
 											"timer_Gy"
-											, pdMS_TO_TICKS(4000)
+											, pdMS_TO_TICKS(4146)
 											, pdTRUE
 											,0
 											,timer_Gy_callback
@@ -103,7 +103,7 @@ void StartTask(void* pdata){
 	task_sem_Gy=xSemaphoreCreateBinary();
 	task_timer_getPx=xTimerCreate(
 											"timer_getPx"
-											, pdMS_TO_TICKS(4000)
+											, pdMS_TO_TICKS(4356)
 											, pdTRUE
 											,0
 											,timer_getPx_callback

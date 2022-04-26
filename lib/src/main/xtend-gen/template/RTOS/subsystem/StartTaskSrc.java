@@ -287,7 +287,7 @@ public class StartTaskSrc implements Template {
           _builder.append("\t");
           _builder.append("\t\t\t\t\t\t\t\t\t\t");
           _builder.append(", pdMS_TO_TICKS(");
-          long _wCET = Query.getWCET(sdf_4, Global.model);
+          int _wCET = Query.getWCET(sdf_4, Global.model);
           _builder.append(_wCET, "\t\t\t\t\t\t\t\t\t\t\t");
           _builder.append(")");
           _builder.newLineIfNotEmpty();
