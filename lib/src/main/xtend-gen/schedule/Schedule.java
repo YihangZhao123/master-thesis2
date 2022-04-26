@@ -1,4 +1,4 @@
-package gen;
+package schedule;
 
 import com.google.common.base.Objects;
 import forsyde.io.java.core.Trait;
@@ -20,18 +20,14 @@ public class Schedule {
   
   public Vertex order = null;
   
-  public List<Vertex> slots;
+  public List<Vertex> slots = new ArrayList<Vertex>();
   
   public Set<Vertex> channels = new HashSet<Vertex>();
   
   public Schedule() {
-    ArrayList<Vertex> _arrayList = new ArrayList<Vertex>();
-    this.slots = _arrayList;
   }
   
   public Schedule(final Vertex tile) {
-    ArrayList<Vertex> _arrayList = new ArrayList<Vertex>();
-    this.slots = _arrayList;
     this.tile = tile;
     if ((this.order == null)) {
       this.order = this.help1(VertexTrait.PLATFORM_RUNTIME_FIXEDPRIORITYSCHEDULER);
@@ -67,13 +63,19 @@ public class Schedule {
         final Consumer<String> _function = new Consumer<String>() {
           public void accept(final String p) {
             if (((!Objects.equal(p, "Combinator")) && (!Objects.equal(p, "CombFunction")))) {
-              Schedule.this.channels.add(VertexAcessor.getNamedPort(Global.model, actor, p, VertexTrait.MOC_SDF_SDFCHANNEL).orElse(null));
-              Schedule.this.channels.add(VertexAcessor.getNamedPort(Global.model, actor, p, VertexTrait.IMPL_TOKENIZABLEDATABLOCK).orElse(null));
+              Schedule.this.channels.add(
+                VertexAcessor.getNamedPort(Global.model, actor, p, VertexTrait.MOC_SDF_SDFCHANNEL).orElse(null));
+              Schedule.this.channels.add(
+                VertexAcessor.getNamedPort(Global.model, actor, p, VertexTrait.IMPL_TOKENIZABLEDATABLOCK).orElse(null));
             }
           }
         };
         actor.getPorts().stream().forEach(_function);
       }
+    }
+    boolean _contains = this.channels.contains(null);
+    if (_contains) {
+      this.channels.remove(null);
     }
   }
   

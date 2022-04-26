@@ -1,13 +1,10 @@
 package template.nonRTOS.actor;
 
-import forsyde.io.java.core.EdgeInfo;
-import forsyde.io.java.core.EdgeTrait;
 import forsyde.io.java.core.Vertex;
 import forsyde.io.java.typed.viewers.moc.sdf.SDFComb;
 import generator.generator;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -41,30 +38,8 @@ public class actorSrc implements Template {
     String _xblockexpression = null;
     {
       String name = Name.name(vertex);
-      final Predicate<EdgeInfo> _function = new Predicate<EdgeInfo>() {
-        public boolean test(final EdgeInfo edgeinfo) {
-          return (edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) || edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT));
-        }
-      };
-      final Function<EdgeInfo, String> _function_1 = new Function<EdgeInfo, String>() {
-        public String apply(final EdgeInfo e) {
-          return e.getSourcePort().get();
-        }
-      };
-      Set<String> out = Global.model.outgoingEdgesOf(vertex).stream().filter(_function).<String>map(_function_1).collect(Collectors.<String>toSet());
-      final Predicate<EdgeInfo> _function_2 = new Predicate<EdgeInfo>() {
-        public boolean test(final EdgeInfo edgeinfo) {
-          return (edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) || edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT));
-        }
-      };
-      final Function<EdgeInfo, String> _function_3 = new Function<EdgeInfo, String>() {
-        public String apply(final EdgeInfo e) {
-          return e.getTargetPort().get();
-        }
-      };
-      Set<String> in = Global.model.incomingEdgesOf(vertex).stream().filter(_function_2).<String>map(_function_3).collect(Collectors.<String>toSet());
-      TreeSet<String> inputPorts = new TreeSet<String>(in);
-      TreeSet<String> outputPorts = new TreeSet<String>(out);
+      TreeSet<String> inputPorts = actorhelp.findInPutPort(vertex);
+      TreeSet<String> outputPorts = actorhelp.findOutPutPort(vertex);
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("#include <stdlib.h>");
       _builder.newLine();
@@ -350,7 +325,7 @@ public class actorSrc implements Template {
           _builder.append("\n", "\t");
         }
       }
-      _builder.append("\t\t");
+      _builder.append("\t");
       _builder.newLine();
       _builder.append("\t");
       _builder.append("combinator(");

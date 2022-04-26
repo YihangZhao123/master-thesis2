@@ -1,7 +1,8 @@
 package template.nonRTOS.subsystem
 
 import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel
-import gen.Schedule
+
+import schedule.Schedule
 import generator.generator
 import java.util.stream.Collectors
 import template.Template
@@ -22,32 +23,26 @@ class multi implements Template{
 		'''
 		#include "../inc/subsystem_«Name.name(tile)».h"
 		«FOR channel:schedule.channels SEPARATOR"" AFTER""»
-			«IF channel!==null»
-				«var channelName=Name.name(channel)»
-				«IF SDFChannel.conforms(channel)»
-					extern circularFIFO_«channelName» channel_«channelName»;
-					extern token_«channelName» arr_«channelName»[];
-					extern int buffersize_«channelName»;
-				«ELSE»
-					extern circularFIFO_«channelName» channel_«channelName»;
-				«ENDIF»
+			«var channelName=Name.name(channel)»
+			«IF SDFChannel.conforms(channel)»
+				extern circularFIFO_«channelName» channel_«channelName»;
+				extern token_«channelName» arr_«channelName»[];
+				extern int buffersize_«channelName»;
+			«ELSE»
+				extern circularFIFO_«channelName» channel_«channelName»;
 			«ENDIF»
 		«ENDFOR»
 		
 		void subsystem_«tile.getIdentifier()»(){
 			«FOR channel:schedule.channels  SEPARATOR "" AFTER "" »
-			«IF channel!==null»
-			«var channelName=Name.name(channel)»
+				«var channelName=Name.name(channel)»
 				«IF SDFChannel.conforms(channel)»
 				init_circularFIFO_«channelName»(&channel_«channelName»,arr_«channelName»,buffersize_«channelName»);
 				«ENDIF»
-			«ENDIF»
 			«ENDFOR»			
 «««			«subsystemHelp.sdfDelayHelpA(channels)»
 			
 			while(1){
-				
-				
 				«FOR actor:schedule.slots SEPARATOR "" AFTER "\n"»
 				«IF actor!==null»
 				actor_«Name.name(actor)»(«subsystemHelp.actorParameter(actor)»);

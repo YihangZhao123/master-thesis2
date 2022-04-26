@@ -1,4 +1,4 @@
-package gen
+package schedule
 
 import forsyde.io.java.core.Vertex
 import java.util.List
@@ -14,14 +14,15 @@ import java.util.HashSet
 class Schedule {
 	public var Vertex tile
 	public var Vertex order = null
-	public List<Vertex> slots
-	public Set<Vertex> channels=new HashSet
+	public List<Vertex> slots =new ArrayList
+	public Set<Vertex> channels = new HashSet
+
 	new() {
-		slots = new ArrayList
+		
 	}
 
 	new(forsyde.io.java.core.Vertex tile) {
-		slots = new ArrayList
+		
 		this.tile = tile
 		if (order === null) {
 			order = help1(VertexTrait.PLATFORM_RUNTIME_FIXEDPRIORITYSCHEDULER)
@@ -54,20 +55,25 @@ class Schedule {
 				slots.add(actor)
 			}
 		}
-		
-		for(Vertex actor:slots){
-			if(actor!==null){
-				actor.getPorts().stream()
-								.forEach([p|
-									if(p!="Combinator"&&p!="CombFunction"){
-										channels.add(VertexAcessor.getNamedPort(Global.model,actor,p,VertexTrait.MOC_SDF_SDFCHANNEL).orElse(null)) 
-										channels.add(VertexAcessor.getNamedPort(Global.model,actor,p,VertexTrait.IMPL_TOKENIZABLEDATABLOCK).orElse(null))
-									}
-								])
+
+		for (Vertex actor : slots) {
+			if (actor !== null) {
+				actor.getPorts().stream().forEach([ p |
+					if (p != "Combinator" && p != "CombFunction") {
+						channels.add(
+							VertexAcessor.getNamedPort(Global.model, actor, p, VertexTrait.MOC_SDF_SDFCHANNEL).
+								orElse(null))
+						channels.add(
+							VertexAcessor.getNamedPort(Global.model, actor, p, VertexTrait.IMPL_TOKENIZABLEDATABLOCK).
+								orElse(null))
+					}
+				])
 			}
 		}
 		
-
+		if(channels.contains(null)){
+			channels.remove(null)
+		}
 	}
 
 	private def help1(Trait a) {

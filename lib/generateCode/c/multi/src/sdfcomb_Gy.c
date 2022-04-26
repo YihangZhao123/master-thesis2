@@ -50,7 +50,7 @@ inline void actor_Gy(circularFIFO_gysig* channel_gy_ptr, const size_t gy_rate
 	token_absysig resy[resy_rate];
 	read_channel_Gy_gy(channel_gy_ptr,gy_rate,gy);
 
-			
+		
 	combinator(gy,gy_rate , resy,resy_rate );	
 	write_channel_Gy_resy(resy,resy_rate,channel_resy_ptr);
 

@@ -1,8 +1,8 @@
 package utils;
 
 import forsyde.io.java.core.ForSyDeSystemGraph;
-import gen.Schedule;
 import java.util.Set;
+import schedule.Schedule;
 
 @SuppressWarnings("all")
 public class Global {

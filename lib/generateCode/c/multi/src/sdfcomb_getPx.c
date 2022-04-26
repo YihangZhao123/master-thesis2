@@ -65,7 +65,7 @@ inline void actor_getPx(circularFIFO_inputImage* channel_imgInput_ptr, const siz
 	token_gysig gy[gy_rate];
 	read_channel_getPx_imgInput(channel_imgInput_ptr,imgInput_rate,imgInput);
 
-			
+		
 	combinator(imgInput,imgInput_rate , gx,gx_rate , gy,gy_rate );	
 	write_channel_getPx_gx(gx,gx_rate,channel_gx_ptr); 
 	

@@ -2,12 +2,13 @@ package generator;
 
 import forsyde.io.java.core.ForSyDeSystemGraph;
 import forsyde.io.java.core.Vertex;
-import gen.Schedule;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import schedule.Schedule;
 import template.Template;
 import utils.Global;
 
@@ -26,9 +27,12 @@ public class generator {
   
   public void create() {
     this.schedule();
-    for (final Template s : this.set) {
-      s.create();
-    }
+    final Consumer<Template> _function = new Consumer<Template>() {
+      public void accept(final Template template) {
+        template.create();
+      }
+    };
+    this.set.stream().forEach(_function);
   }
   
   public boolean add(final Template template) {

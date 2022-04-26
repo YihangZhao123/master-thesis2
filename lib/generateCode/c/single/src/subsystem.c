@@ -14,8 +14,6 @@
 	extern circularFIFO_absxsig channel_absxsig;
 	extern token_absxsig arr_absxsig[];
 	extern int buffersize_absxsig;
-	extern circularFIFO_outputImage channel_outputImage;
-	extern circularFIFO_inputImage channel_inputImage;
 void subsystem(){
 	//create internal channels
 	/*
@@ -32,22 +30,20 @@ void subsystem(){
 		
 	while(1){
 		/*round robin*/
-		actor_getPx(&channel_inputImage,1
-		 ,&channel_gxsig,6 
-		,&channel_gysig,6
+		actor_sobel_getPx(&channel_gxsig,6,
+		&channel_gysig,6
 		);
 		
-		actor_Gx(&channel_gxsig,6
+		actor_sobel_Gx(&channel_gxsig,6
 		 ,&channel_absxsig,1
 		);
 		
-		actor_Gy(&channel_gysig,6
+		actor_sobel_Gy(&channel_gysig,6
 		 ,&channel_absysig,1
 		);
 		
-		actor_Abs(&channel_absxsig,1,
+		actor_sobel_Abs(&channel_absxsig,1,
 		&channel_absysig,1
-		 ,&channel_outputImage,1
 		);
 
 				

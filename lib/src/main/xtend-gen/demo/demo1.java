@@ -20,8 +20,9 @@ import utils.Load;
 public class demo1 {
   public static void main(final String[] args) {
     final String forsyde = "forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";
+    final String path = "forsyde-io\\test1.forsyde.xmi";
     final String root = "generateCode\\c\\single";
-    ForSyDeSystemGraph model = Load.load(forsyde);
+    ForSyDeSystemGraph model = Load.load(path);
     generator gen = new generator(model, root);
     channelInc _channelInc = new channelInc();
     gen.add(_channelInc);

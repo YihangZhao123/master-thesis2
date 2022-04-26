@@ -1,7 +1,13 @@
 package template.nonRTOS.actor;
 
+import forsyde.io.java.core.EdgeInfo;
+import forsyde.io.java.core.EdgeTrait;
 import forsyde.io.java.core.Vertex;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import utils.Global;
 import utils.Name;
@@ -305,5 +311,35 @@ public class actorhelp {
       }
     }
     return _builder;
+  }
+  
+  public static TreeSet<String> findOutPutPort(final Vertex vertex) {
+    final Predicate<EdgeInfo> _function = new Predicate<EdgeInfo>() {
+      public boolean test(final EdgeInfo edgeinfo) {
+        return (edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) || edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT));
+      }
+    };
+    final Function<EdgeInfo, String> _function_1 = new Function<EdgeInfo, String>() {
+      public String apply(final EdgeInfo e) {
+        return e.getSourcePort().get();
+      }
+    };
+    Set<String> out = Global.model.outgoingEdgesOf(vertex).stream().filter(_function).<String>map(_function_1).collect(Collectors.<String>toSet());
+    return new TreeSet<String>(out);
+  }
+  
+  public static TreeSet<String> findInPutPort(final Vertex vertex) {
+    final Predicate<EdgeInfo> _function = new Predicate<EdgeInfo>() {
+      public boolean test(final EdgeInfo edgeinfo) {
+        return (edgeinfo.hasTrait(EdgeTrait.MOC_SDF_SDFDATAEDGE) || edgeinfo.hasTrait(EdgeTrait.IMPL_DATAMOVEMENT));
+      }
+    };
+    final Function<EdgeInfo, String> _function_1 = new Function<EdgeInfo, String>() {
+      public String apply(final EdgeInfo e) {
+        return e.getTargetPort().get();
+      }
+    };
+    Set<String> in = Global.model.incomingEdgesOf(vertex).stream().filter(_function).<String>map(_function_1).collect(Collectors.<String>toSet());
+    return new TreeSet<String>(in);
   }
 }

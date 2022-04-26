@@ -8,12 +8,10 @@ extern token_absxsig arr_absxsig[];
 extern int buffersize_absxsig;
 
 void subsystem_tile2(){
-		init_circularFIFO_absysig(&channel_absysig,arr_absysig,buffersize_absysig);
-		init_circularFIFO_absxsig(&channel_absxsig,arr_absxsig,buffersize_absxsig);
+	init_circularFIFO_absysig(&channel_absysig,arr_absysig,buffersize_absysig);
+	init_circularFIFO_absxsig(&channel_absxsig,arr_absxsig,buffersize_absxsig);
 	
 	while(1){
-		
-		
 		actor_Abs(&channel_absxsig,1,
 		&channel_absysig,1
 		 ,&channel_outputImage,1

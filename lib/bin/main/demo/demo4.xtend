@@ -1,7 +1,8 @@
 package demo
 
 import forsyde.io.java.core.Vertex
-import gen.Schedule
+
+import schedule.Schedule
 import java.util.HashSet
 import java.util.Set
 import utils.Load

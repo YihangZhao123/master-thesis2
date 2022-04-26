@@ -69,7 +69,7 @@ circularFIFO_absysig* channel_resy_ptr, const size_t resy_rate
 	
 	read_channel_Abs_resy(channel_resy_ptr,resy_rate,resy);
 
-			
+		
 	combinator(resx,resx_rate,resy,resy_rate , imgOutput,imgOutput_rate );	
 	write_channel_Abs_imgOutput(imgOutput,imgOutput_rate,channel_imgOutput_ptr);
 

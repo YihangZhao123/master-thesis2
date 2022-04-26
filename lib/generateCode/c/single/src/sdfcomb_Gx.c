@@ -50,7 +50,7 @@ inline void actor_Gx(circularFIFO_gxsig* channel_gx_ptr, const size_t gx_rate
 	token_absxsig resx[resx_rate];
 	read_channel_Gx_gx(channel_gx_ptr,gx_rate,gx);
 
-			
+		
 	combinator(gx,gx_rate , resx,resx_rate );	
 	write_channel_Gx_resx(resx,resx_rate,channel_resx_ptr);
 

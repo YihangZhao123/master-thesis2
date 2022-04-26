@@ -8,5 +8,4 @@ void actor_getPx(circularFIFO_inputImage* channel_imgInput_ptr, const size_t img
 ,circularFIFO_gysig* channel_gy_ptr,const size_t gy_rate
 );
 
-
 #endif		

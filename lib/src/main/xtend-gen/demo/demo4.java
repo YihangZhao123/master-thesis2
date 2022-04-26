@@ -2,12 +2,12 @@ package demo;
 
 import forsyde.io.java.core.ForSyDeSystemGraph;
 import forsyde.io.java.core.Vertex;
-import gen.Schedule;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import schedule.Schedule;
 import utils.Load;
 
 @SuppressWarnings("all")

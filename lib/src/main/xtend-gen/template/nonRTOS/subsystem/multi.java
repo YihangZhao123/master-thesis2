@@ -2,13 +2,13 @@ package template.nonRTOS.subsystem;
 
 import forsyde.io.java.core.Vertex;
 import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel;
-import gen.Schedule;
 import generator.generator;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import schedule.Schedule;
 import template.Template;
 import utils.Global;
 import utils.Name;
@@ -50,38 +50,34 @@ public class multi implements Template {
           } else {
             _builder.appendImmediate("", "");
           }
+          String channelName = Name.name(channel);
+          _builder.newLineIfNotEmpty();
           {
-            if ((channel != null)) {
-              String channelName = Name.name(channel);
+            Boolean _conforms = SDFChannel.conforms(channel);
+            if ((_conforms).booleanValue()) {
+              _builder.append("extern circularFIFO_");
+              _builder.append(channelName);
+              _builder.append(" channel_");
+              _builder.append(channelName);
+              _builder.append(";");
               _builder.newLineIfNotEmpty();
-              {
-                Boolean _conforms = SDFChannel.conforms(channel);
-                if ((_conforms).booleanValue()) {
-                  _builder.append("extern circularFIFO_");
-                  _builder.append(channelName);
-                  _builder.append(" channel_");
-                  _builder.append(channelName);
-                  _builder.append(";");
-                  _builder.newLineIfNotEmpty();
-                  _builder.append("extern token_");
-                  _builder.append(channelName);
-                  _builder.append(" arr_");
-                  _builder.append(channelName);
-                  _builder.append("[];");
-                  _builder.newLineIfNotEmpty();
-                  _builder.append("extern int buffersize_");
-                  _builder.append(channelName);
-                  _builder.append(";");
-                  _builder.newLineIfNotEmpty();
-                } else {
-                  _builder.append("extern circularFIFO_");
-                  _builder.append(channelName);
-                  _builder.append(" channel_");
-                  _builder.append(channelName);
-                  _builder.append(";");
-                  _builder.newLineIfNotEmpty();
-                }
-              }
+              _builder.append("extern token_");
+              _builder.append(channelName);
+              _builder.append(" arr_");
+              _builder.append(channelName);
+              _builder.append("[];");
+              _builder.newLineIfNotEmpty();
+              _builder.append("extern int buffersize_");
+              _builder.append(channelName);
+              _builder.append(";");
+              _builder.newLineIfNotEmpty();
+            } else {
+              _builder.append("extern circularFIFO_");
+              _builder.append(channelName);
+              _builder.append(" channel_");
+              _builder.append(channelName);
+              _builder.append(";");
+              _builder.newLineIfNotEmpty();
             }
           }
         }
@@ -103,28 +99,23 @@ public class multi implements Template {
           } else {
             _builder.appendImmediate("", "\t");
           }
+          _builder.append("\t");
+          String channelName_1 = Name.name(channel_1);
+          _builder.newLineIfNotEmpty();
           {
-            if ((channel_1 != null)) {
+            Boolean _conforms_1 = SDFChannel.conforms(channel_1);
+            if ((_conforms_1).booleanValue()) {
               _builder.append("\t");
-              String channelName_1 = Name.name(channel_1);
+              _builder.append("init_circularFIFO_");
+              _builder.append(channelName_1, "\t");
+              _builder.append("(&channel_");
+              _builder.append(channelName_1, "\t");
+              _builder.append(",arr_");
+              _builder.append(channelName_1, "\t");
+              _builder.append(",buffersize_");
+              _builder.append(channelName_1, "\t");
+              _builder.append(");");
               _builder.newLineIfNotEmpty();
-              {
-                Boolean _conforms_1 = SDFChannel.conforms(channel_1);
-                if ((_conforms_1).booleanValue()) {
-                  _builder.append("\t");
-                  _builder.append("\t");
-                  _builder.append("init_circularFIFO_");
-                  _builder.append(channelName_1, "\t\t");
-                  _builder.append("(&channel_");
-                  _builder.append(channelName_1, "\t\t");
-                  _builder.append(",arr_");
-                  _builder.append(channelName_1, "\t\t");
-                  _builder.append(",buffersize_");
-                  _builder.append(channelName_1, "\t\t");
-                  _builder.append(");");
-                  _builder.newLineIfNotEmpty();
-                }
-              }
             }
           }
         }
@@ -136,10 +127,6 @@ public class multi implements Template {
       _builder.newLine();
       _builder.append("\t");
       _builder.append("while(1){");
-      _builder.newLine();
-      _builder.append("\t\t");
-      _builder.newLine();
-      _builder.append("\t\t");
       _builder.newLine();
       {
         boolean _hasElements_2 = false;

@@ -8,5 +8,4 @@ circularFIFO_absysig* channel_resy_ptr, const size_t resy_rate
  ,circularFIFO_outputImage* channel_imgOutput_ptr,const size_t imgOutput_rate
 );
 
-
 #endif		
