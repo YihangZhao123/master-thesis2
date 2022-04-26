@@ -1,6 +1,7 @@
-/nonRTOS/
-/util/
 /demo/
 /generator/
+/master/
+/nonRTOS/
 /template/
 /utils/
+/gen/

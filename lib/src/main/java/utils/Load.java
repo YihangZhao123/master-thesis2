@@ -12,7 +12,7 @@ public class Load {
 		try {
 			handler= new ForSyDeModelHandler();
 			model = handler.loadModel(path);
-			
+			Global.model=model;
 		} catch (Exception e) {
 			
 			e.printStackTrace();

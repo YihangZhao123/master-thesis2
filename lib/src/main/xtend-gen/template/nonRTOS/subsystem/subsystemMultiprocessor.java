@@ -102,25 +102,24 @@ public class subsystemMultiprocessor implements Template {
         }
         String channelName = Name.name(channel);
         _builder.newLineIfNotEmpty();
-        _builder.append("\t");
+        _builder.newLine();
         _builder.append("extern circularFIFO_");
-        _builder.append(channelName, "\t");
+        _builder.append(channelName);
         _builder.append(" channel_");
-        _builder.append(channelName, "\t");
+        _builder.append(channelName);
         _builder.append(";");
         _builder.newLineIfNotEmpty();
-        _builder.append("\t");
         _builder.append("extern token_");
-        _builder.append(channelName, "\t");
+        _builder.append(channelName);
         _builder.append(" arr_");
-        _builder.append(channelName, "\t");
+        _builder.append(channelName);
         _builder.append("[];");
         _builder.newLineIfNotEmpty();
-        _builder.append("\t");
         _builder.append("extern int buffersize_");
-        _builder.append(channelName, "\t");
+        _builder.append(channelName);
         _builder.append(";");
         _builder.newLineIfNotEmpty();
+        _builder.newLine();
       }
       if (_hasElements) {
         _builder.append("");

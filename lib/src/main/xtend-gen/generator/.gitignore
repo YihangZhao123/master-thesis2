@@ -5,3 +5,5 @@
 /.Channel.java._trace
 /.ChannelGen.java._trace
 /.ActorGen.java._trace
+/.ActorModule.java._trace
+/.ChannelModule.java._trace

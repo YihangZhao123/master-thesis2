@@ -1,13 +1,14 @@
 package demo
 
 import generator.generator
+
 import template.nonRTOS.actor.actorInc
 import template.nonRTOS.actor.actorSrc
 import template.nonRTOS.fifo.circular.A.channelInc
 import template.nonRTOS.fifo.circular.A.channelSrc
 import template.nonRTOS.spinlock.spinlock
 import template.nonRTOS.subsystem.configInc
-import template.nonRTOS.subsystem.subsystemMultiprocessor
+import template.nonRTOS.subsystem.multi
 import utils.Load
 
 /**
@@ -15,11 +16,11 @@ import utils.Load
  */
 class demo2 {
 	def static void main(String[] args) {
-		val forsyde="forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";
+		val path1="forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";
 		val path2= "forsyde-io\\sobel-application.fiodl"
 		//val forsyde="forsyde-io\\test1.forsyde.xmi"
 		val root="generateCode\\c\\multi"
-		var model = Load.load(path2);	
+		var model = Load.load(path1);	
 		
 		var gen = new generator(model,root)
 		
@@ -30,8 +31,8 @@ class demo2 {
 		gen.add(new actorInc())
 		gen.add(new actorSrc())
 		
-		gen.add(new subsystemMultiprocessor())
-		
+//		gen.add(new subsystemMultiprocessor())
+		gen.add(new	multi())
 		gen.add(new configInc())
 		
 		gen.create()

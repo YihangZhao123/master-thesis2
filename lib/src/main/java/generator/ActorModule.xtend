@@ -1,6 +1,6 @@
 package generator
 
-class ActorGen {
+class ActorModule {
 	def gen(){
 		var set = Global.model.vertexSet()
 			.stream()

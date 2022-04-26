@@ -1,7 +1,7 @@
 package generator;
 
 @SuppressWarnings("all")
-public class ActorGen {
+public class ActorModule {
   public void gen() {
     throw new Error("Unresolved compilation problems:"
       + "\nVertex cannot be resolved to a type."

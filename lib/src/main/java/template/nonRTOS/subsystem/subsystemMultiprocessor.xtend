@@ -1,6 +1,7 @@
  package template.nonRTOS.subsystem
 
 import forsyde.io.java.core.Vertex
+
 import forsyde.io.java.core.VertexAcessor
 import forsyde.io.java.core.VertexAcessor.VertexPortDirection
 import forsyde.io.java.core.VertexTrait
@@ -62,10 +63,12 @@ class subsystemMultiprocessor implements Template{
 		'''
 		#include "../inc/subsystem_«Name.name(tile)».h"
 		«FOR channel:channels SEPARATOR"\n" AFTER""»
-	«var channelName=Name.name(channel)»
+		«var channelName=Name.name(channel)»
+		
 		extern circularFIFO_«channelName» channel_«channelName»;
 		extern token_«channelName» arr_«channelName»[];
 		extern int buffersize_«channelName»;
+		
 		«ENDFOR»
 		
 		void subsystem_«tile.getIdentifier()»(){

@@ -2,9 +2,12 @@ package demo;
 
 import forsyde.io.java.core.ForSyDeSystemGraph;
 import forsyde.io.java.core.Vertex;
+import gen.Schedule;
 import java.util.HashSet;
 import java.util.Set;
-import org.eclipse.xtext.xbase.lib.InputOutput;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import utils.Load;
 
 @SuppressWarnings("all")
@@ -14,13 +17,19 @@ public class demo4 {
     final String root = "generateCode\\c\\single";
     ForSyDeSystemGraph model = Load.load(forsyde);
     Set<Vertex> s = new HashSet<Vertex>();
-    Set<Vertex> _vertexSet = model.vertexSet();
-    for (final Vertex v : _vertexSet) {
-      Boolean _hasTrait = v.hasTrait("WCET");
-      if ((_hasTrait).booleanValue()) {
-        InputOutput.<String>println(v.getIdentifier());
-        s.add(v);
+    final Predicate<Vertex> _function = new Predicate<Vertex>() {
+      public boolean test(final Vertex v) {
+        return (v.hasTrait("platform::GenericProcessingModule")).booleanValue();
       }
+    };
+    final Function<Vertex, Schedule> _function_1 = new Function<Vertex, Schedule>() {
+      public Schedule apply(final Vertex v) {
+        return new Schedule(v);
+      }
+    };
+    Set<Schedule> schedules = model.vertexSet().stream().filter(_function).<Schedule>map(_function_1).collect(Collectors.<Schedule>toSet());
+    for (final Schedule p : schedules) {
+      p.print();
     }
   }
 }

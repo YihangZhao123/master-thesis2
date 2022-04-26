@@ -3,14 +3,17 @@ package generator
 import utils.Global
 import utils.Save
 
-class ChannelGen {
+class ChannelModule {
 	def create(){
 		Global.model.vertexSet()
 					.stream()
 					.filter([v|v.hasTrait("impl::TokenizableDataBlock")])
 					.forEach([v|
-						Save.save(path(v),src(v))
-						Save.save(path(v),inc(v))
+						process(v)
 					])		
+	}
+	
+	def process(Vertex vertex){
+		
 	}
 }

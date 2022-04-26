@@ -47,13 +47,11 @@ inline void actor_Gy(circularFIFO_gysig* channel_gy_ptr, const size_t gy_rate
 ){
 
 	token_gysig gy[gy_rate];
-
-		//array aiming to writing data to input ports
 	token_absysig resy[resy_rate];
+	read_channel_Gy_gy(channel_gy_ptr,gy_rate,gy);
 
-		read_channel_Gy_gy(channel_gy_ptr,gy_rate,gy);
-
-		combinator(gy,gy_rate , resy,resy_rate );	
+			
+	combinator(gy,gy_rate , resy,resy_rate );	
 	write_channel_Gy_resy(resy,resy_rate,channel_resy_ptr);
 
 	}
