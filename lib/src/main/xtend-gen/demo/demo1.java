@@ -19,14 +19,12 @@ import utils.Load;
 @SuppressWarnings("all")
 public class demo1 {
   public static void main(final String[] args) {
-    final String forsyde = "forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";
-    final String path = "forsyde-io\\test1.forsyde.xmi";
+    final String path = "forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";
     final String root = "generateCode\\c\\single";
     ForSyDeSystemGraph model = Load.load(path);
     generator gen = new generator(model, root);
     channelInc _channelInc = new channelInc();
     gen.add(_channelInc);
-    InputOutput.<String>println("inc end");
     channelSrc _channelSrc = new channelSrc();
     gen.add(_channelSrc);
     spinlock _spinlock = new spinlock();

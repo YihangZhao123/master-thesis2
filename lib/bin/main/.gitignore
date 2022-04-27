@@ -1,8 +1,3 @@
-/demo/
-/generator/
-/master/
-/nonRTOS/
-/template/
-/utils/
 /gen/
-/schedule/
+/nonRTOS/
+/util/

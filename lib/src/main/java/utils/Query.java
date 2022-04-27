@@ -129,13 +129,11 @@ public class Query {
 	
 	
 	public static  long getTokenSizeInBits(Vertex vertex) {
-		if(vertex.hasTrait("moc::sdf::SDFChannel")) {
-			return SDFChannel.enforce(vertex).getTokenSizeInBits();
-		}else {
+
 			Map<String, VertexProperty> a = vertex.getProperties();
 			long b = (Long)a.get("tokenSizeInBits").unwrap();
 			return b;
-		}
+		
 	}
 	
 	

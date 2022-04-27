@@ -38,6 +38,7 @@ public class SDFChannelHeader implements Template {
    */
   public String inc(final Vertex vertex) {
     throw new Error("Unresolved compilation problems:"
+      + "\nThe method getTokenSizeInBits() is undefined for the type SDFChannel"
       + "\nThe method or field type is undefined");
   }
   

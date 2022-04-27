@@ -159,10 +159,6 @@ public class subsystemMultiprocessor implements Template {
       }
     }
     _builder.append("\t");
-    String _sdfDelayHelpA = subsystemHelp.sdfDelayHelpA(channels);
-    _builder.append(_sdfDelayHelpA, "\t");
-    _builder.newLineIfNotEmpty();
-    _builder.append("\t");
     _builder.append("while(1){");
     _builder.newLine();
     {

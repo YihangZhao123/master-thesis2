@@ -24,9 +24,8 @@ class channelInc implements Template{
 
 	def String createHeader(Vertex vertex){
 		val name = Name.name(vertex)
-		var SDFChannel  channel = SDFChannel.enforce(vertex)
 		var String tmp = name.toUpperCase();
-		var token_size = channel.getTokenSizeInBits()
+		var token_size = Query.getTokenSizeInBits(vertex)
 		'''
 			#ifndef                   «tmp»_FREERTOS_H_
 			#define                   «tmp»_FREERTOS_H_

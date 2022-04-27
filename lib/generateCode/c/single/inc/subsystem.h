@@ -7,10 +7,10 @@
 #include "../inc/sdfchannel_absxsig.h"
 
 
-#include "../inc/sdfcomb_sobel_Gx.h"
-#include "../inc/sdfcomb_sobel_Gy.h"
-#include "../inc/sdfcomb_sobel_getPx.h"
-#include "../inc/sdfcomb_sobel_Abs.h"
+#include "../inc/sdfcomb_Gx.h"
+#include "../inc/sdfcomb_Abs.h"
+#include "../inc/sdfcomb_Gy.h"
+#include "../inc/sdfcomb_getPx.h"
 
 
 //system input and system output

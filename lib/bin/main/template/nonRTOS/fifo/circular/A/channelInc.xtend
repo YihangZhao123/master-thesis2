@@ -7,6 +7,7 @@ import utils.Global
 import utils.Name
 import utils.Query
 import utils.Save
+import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel
 
 class channelInc implements Template{
 
@@ -23,7 +24,7 @@ class channelInc implements Template{
 	}	
 
 	def String inc(Vertex vertex) {
-		//println(vertex)
+
 		val name = Name.name(vertex)
 		var String tmp = name.toUpperCase();
 		var token_size = Query.getTokenSizeInBits(vertex)

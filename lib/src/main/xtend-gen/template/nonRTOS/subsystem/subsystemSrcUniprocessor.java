@@ -172,10 +172,6 @@ public class subsystemSrcUniprocessor implements Template {
       _builder.append("\t");
       _builder.append("//SDFDelay");
       _builder.newLine();
-      _builder.append("\t");
-      String _sdfDelayHelpB = subsystemHelp.sdfDelayHelpB(sdfChannelSet);
-      _builder.append(_sdfDelayHelpB, "\t");
-      _builder.newLineIfNotEmpty();
       _builder.append("\t\t");
       _builder.newLine();
       _builder.append("\t");

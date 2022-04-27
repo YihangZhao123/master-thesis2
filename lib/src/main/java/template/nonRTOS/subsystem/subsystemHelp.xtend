@@ -1,9 +1,9 @@
 package template.nonRTOS.subsystem
 
 import forsyde.io.java.core.EdgeTrait
+
 import forsyde.io.java.core.Vertex
 import forsyde.io.java.typed.viewers.moc.sdf.SDFComb
-import forsyde.io.java.typed.viewers.moc.sdf.SDFDelay
 import java.util.ArrayList
 import java.util.TreeSet
 import java.util.stream.Collectors
@@ -59,28 +59,28 @@ class subsystemHelp {
 		'''
 	}	
 	
-	static def String  sdfDelayHelpB(Set<SDFChannel> temps){
-		var delays = Global.model.vertexSet().stream().filter([v|SDFDelay.conforms(v)]).collect(Collectors.toSet())
-		var sdfdelays=  delays.stream().map([v|SDFDelay.enforce(v)]).collect(Collectors.toSet())
-		
-		'''
-			«FOR delay:sdfdelays   SEPARATOR "" AFTER ""»
-				
-				«IF delay.getDelayedChannelPort(Global.model).isPresent()»
-					«var sdfchannel=delay.getDelayedChannelPort(Global.model).get()»
-				«IF temps.contains(sdfchannel)»	
-					«var tokens = (delay.getProperties().get("delayedTokens").unwrap() as ArrayList<Integer>)»
-					«var channelName= Name.name(sdfchannel)»
-					«FOR  token :tokens SEPARATOR "\n" AFTER"\n"»
-					write_circularFIFO_non_blocking_«channelName»(&channel_«channelName»,«token»);
-					«ENDFOR»
-				«ENDIF»
-				«ENDIF»
-			«ENDFOR»	
-		'''		
-	}
-	static def String  sdfDelayHelpA(Set<Vertex> channels){
-		var temps =channels.stream().map([cha|SDFChannel.enforce(cha)]).collect(Collectors.toSet())
-		sdfDelayHelpB(temps)
-	}	 
+//	static def String  sdfDelayHelpB(Set<SDFChannel> temps){
+//		var delays = Global.model.vertexSet().stream().filter([v|SDFDelay.conforms(v)]).collect(Collectors.toSet())
+//		var sdfdelays=  delays.stream().map([v|SDFDelay.enforce(v)]).collect(Collectors.toSet())
+//		
+//		'''
+//			«FOR delay:sdfdelays   SEPARATOR "" AFTER ""»
+//				
+//				«IF delay.getDelayedChannelPort(Global.model).isPresent()»
+//					«var sdfchannel=delay.getDelayedChannelPort(Global.model).get()»
+//				«IF temps.contains(sdfchannel)»	
+//					«var tokens = (delay.getProperties().get("delayedTokens").unwrap() as ArrayList<Integer>)»
+//					«var channelName= Name.name(sdfchannel)»
+//					«FOR  token :tokens SEPARATOR "\n" AFTER"\n"»
+//					write_circularFIFO_non_blocking_«channelName»(&channel_«channelName»,«token»);
+//					«ENDFOR»
+//				«ENDIF»
+//				«ENDIF»
+//			«ENDFOR»	
+//		'''		
+//	}
+//	static def String  sdfDelayHelpA(Set<Vertex> channels){
+//		var temps =channels.stream().map([cha|SDFChannel.enforce(cha)]).collect(Collectors.toSet())
+//		sdfDelayHelpB(temps)
+//	}	 
 }

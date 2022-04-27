@@ -16,15 +16,15 @@ import utils.Load
  */
 class demo1 {
 	def static void main(String[] args) {
-		val forsyde="forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";
-		val path="forsyde-io\\test1.forsyde.xmi";
+		val path="forsyde-io\\complete-mapped-sobel-model.forsyde.xmi";
+		
 		val root="generateCode\\c\\single"
 		var model = Load.load(path);	
 		
 		var gen = new generator(model,root)
 		
 		gen.add(new channelInc())
-		println("inc end")
+//		println("inc end")
 		gen.add(new channelSrc())
 		gen.add(new spinlock())
 		
@@ -34,7 +34,7 @@ class demo1 {
 		gen.add(new subsystemIncUniprocessor())
 		gen.add(new subsystemSrcUniprocessor())
 		gen.add(new configInc())
-		
+//		
 		gen.create()
 		
 		println("end!")

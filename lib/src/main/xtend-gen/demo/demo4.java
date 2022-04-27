@@ -4,11 +4,12 @@ import forsyde.io.java.core.ForSyDeSystemGraph;
 import forsyde.io.java.core.Vertex;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import schedule.Schedule;
+import org.eclipse.xtext.xbase.lib.InputOutput;
+import utils.Global;
 import utils.Load;
+import utils.Name;
 
 @SuppressWarnings("all")
 public class demo4 {
@@ -19,17 +20,14 @@ public class demo4 {
     Set<Vertex> s = new HashSet<Vertex>();
     final Predicate<Vertex> _function = new Predicate<Vertex>() {
       public boolean test(final Vertex v) {
-        return (v.hasTrait("platform::GenericProcessingModule")).booleanValue();
+        return (v.hasTrait("impl::TokenizableDataBlock")).booleanValue();
       }
     };
-    final Function<Vertex, Schedule> _function_1 = new Function<Vertex, Schedule>() {
-      public Schedule apply(final Vertex v) {
-        return new Schedule(v);
+    final Consumer<Vertex> _function_1 = new Consumer<Vertex>() {
+      public void accept(final Vertex v) {
+        InputOutput.<String>println(Name.name(v));
       }
     };
-    Set<Schedule> schedules = model.vertexSet().stream().filter(_function).<Schedule>map(_function_1).collect(Collectors.<Schedule>toSet());
-    for (final Schedule p : schedules) {
-      p.print();
-    }
+    Global.model.vertexSet().stream().filter(_function).forEach(_function_1);
   }
 }

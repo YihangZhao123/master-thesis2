@@ -2,6 +2,7 @@
 
 import forsyde.io.java.core.Vertex
 
+
 import forsyde.io.java.core.VertexAcessor
 import forsyde.io.java.core.VertexAcessor.VertexPortDirection
 import forsyde.io.java.core.VertexTrait
@@ -76,7 +77,7 @@ class subsystemMultiprocessor implements Template{
 			«var channelName=Name.name(channel)»
 			init_circularFIFO_«channelName»(&channel_«channelName»,arr_«channelName»,buffersize_«channelName»);
 			«ENDFOR»			
-			«subsystemHelp.sdfDelayHelpA(channels)»
+«««			«subsystemHelp.sdfDelayHelpA(channels)»
 			while(1){
 				«FOR actor:firingSlots SEPARATOR "" AFTER "\n"»
 				actor_«Name.name(actor)»(«subsystemHelp.actorParameter(actor)»);

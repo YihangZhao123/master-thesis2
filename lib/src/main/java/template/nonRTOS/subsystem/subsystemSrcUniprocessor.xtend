@@ -1,10 +1,10 @@
 package template.nonRTOS.subsystem
 
 import forsyde.io.java.core.EdgeTrait
+
 import forsyde.io.java.core.Vertex
 import forsyde.io.java.typed.viewers.moc.sdf.SDFChannel
 import forsyde.io.java.typed.viewers.moc.sdf.SDFComb
-import forsyde.io.java.typed.viewers.moc.sdf.SDFDelay
 import generator.generator
 import java.util.ArrayList
 import java.util.TreeMap
@@ -38,7 +38,7 @@ class subsystemSrcUniprocessor implements Template {
 
 		var system_in_out = Global.model.vertexSet().stream().filter([v|v.hasTrait("impl::TokenizableDataBlock")]).
 			filter([v|!v.hasTrait("moc::sdf::SDFChannel")]).collect(Collectors.toSet())
-		// get the firing set
+		
 		var firingSet = new TreeMap<Integer, Vertex>();
 		for (Vertex v : sdfCombSet) {
 			firingSet.put(Query.getFiringSlot(SDFComb::enforce(v)), v)
@@ -67,7 +67,7 @@ class subsystemSrcUniprocessor implements Template {
 				«ENDFOR»
 				
 				//SDFDelay
-				«subsystemHelp.sdfDelayHelpB(sdfChannelSet)»
+«««				«subsystemHelp.sdfDelayHelpB(sdfChannelSet)»
 					
 				while(1){
 					/*round robin*/
